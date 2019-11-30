@@ -49,7 +49,7 @@ extra-source-files:  CHANGELOG.md
 
 library
   -- Modules exported by the library.
-  exposed-modules: Main
+  exposed-modules: App
 
   -- Modules included in this library but not exported.
   -- other-modules:
@@ -58,8 +58,11 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base ^>=4.11.1.0
-
+  build-depends:       base ^>=4.11.1.0,
+                       reflex-basic-host,
+                       reflex,
+                       gi-gtk,
+                       haskell-gi-base
   -- Directories containing source files.
   hs-source-dirs:      src
 
@@ -72,15 +75,13 @@ executable ReflexExperiment
   main-is:             Main.hs
 
   -- Modules included in this executable, other than Main.
-  -- other-modules:
+  other-modules: App
 
   -- LANGUAGE extensions used by modules in this package.
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
   build-depends:       base ^>=4.11.1.0,
-                       reflex-basic-host,
-                       reflex
 
   -- Directories containing source files.
   hs-source-dirs:      src
