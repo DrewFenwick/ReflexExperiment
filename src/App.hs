@@ -1,25 +1,17 @@
-{-# LANGUAGE OverloadedStrings, OverloadedLabels #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TypeFamilies     #-}
 
 module App (app) where
 
-import qualified GI.Gtk as Gtk
-import Data.GI.Base
+import Reflex.Host.Basic
+import Control.Concurrent (forkIO)
+import Control.Concurrent.MVar
+
+import Network
+import Gui
 
 app :: IO ()
 app = do
-  Gtk.init Nothing
-
-  win <- new Gtk.Window [ #title := "My First App" ]
-
-  on win #destroy Gtk.mainQuit
-
-  button <- new Gtk.Button [ #label := "Click me" ]
-
-  on button #clicked (set button [ #sensitive := False,
-                                   #label := "Thanks for clicking me" ])
-
-  #add win button
-
-  #showAll win
-
-  Gtk.main
+  triggers <- newEmptyMVar :: IO (MVar GuiTriggers)
+  forkIO $ basicHostForever $ network triggers
+  gui =<< takeMVar triggers
