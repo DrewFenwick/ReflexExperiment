@@ -81,11 +81,12 @@ executable ReflexExperiment
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.11.1.0,
-                       reflex-basic-host,
-                       reflex,
-                       gi-gtk,
-                       haskell-gi-base,
+  build-depends:       base >=4.7 && <4.13,
+                       haskell-gi-base ==0.23.*,
+                       reflex-basic-host ==0.2.*, 
+                       reflex ==0.6.*,
+                       gi-gtk ==3.0.*,
+                       text
 
   -- Directories containing source files.
   hs-source-dirs:      src

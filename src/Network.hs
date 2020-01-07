@@ -1,5 +1,6 @@
 {-# language TypeFamilies     #-}
 {-# language FlexibleContexts #-}
+{-# language RecordWildCards  #-}
 
 module Network (network) where
 
@@ -8,8 +9,9 @@ import Reflex.Host.Basic
 import Control.Concurrent.MVar
 import Control.Monad.IO.Class
 import Control.Monad.Fix (MonadFix)
+import Data.Text (pack)
 
-import Gui (GuiTriggers(..))
+import Gui (GuiTriggers(..), GuiActions(..))
 
 myNetwork
   :: (Reflex t, MonadHold t m, MonadFix m)
@@ -17,12 +19,12 @@ myNetwork
   -> m (Dynamic t Int)
 myNetwork = count
 
-network ::  (BasicGuestConstraints t m) => MVar GuiTriggers -> BasicGuest t m ()
-network guiTriggers = do
+network ::  (BasicGuestConstraints t m) => GuiActions -> MVar GuiTriggers -> BasicGuest t m ()
+network GuiActions{..} guiTriggers = do
   (clickEvent, clickTrigger) <- newTriggerEvent 
   liftIO . putMVar guiTriggers $ GuiTriggers (clickTrigger ())
 
-  clickCount <- myNetwork clickEvent
+  clickCount <- count clickEvent
 
-  performEvent_ . fmap (liftIO . putStrLn . show) . updated $ clickCount
+  performEvent_ . fmap (liftIO . retitleButton . pack . show) . updated $ clickCount
   pure ()
